@@ -1,0 +1,25 @@
+{
+  "name": "coolquest",
+  "version": "0.0.1",
+  "description": "questions about user's feedback",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davidwillianx/coolquest.git"
+  },
+  "author": "David Willian, Laerte Guedes , Luiz Danin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidwillianx/coolquest/issues"
+  },
+  "homepage": "https://github.com/davidwillianx/coolquest",
+  "dependencies": {
+    "ejs": "^2.3.2",
+    "express": "^4.13.1",
+    "morgan": "^1.6.1",
+    "path": "^0.11.14"
+  }
+}
