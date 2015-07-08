@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 
 describe('mongoose connection', function() {
   it('should not have connection error', function() {
-    mongoose.connect('mongodb://localhost/sockio',function(error){
+    mongoose.connect(process.env.MONGO,function(error){
       should.not.exist.error(error)
     });
   });
