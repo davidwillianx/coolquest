@@ -6,6 +6,7 @@ var logger = require('morgan');
 var flash = require('flash');
 
 
+var qstapi = require('./app/routes/qstapi');
 var app = express();
 
 app.set('view engine', 'ejs');
@@ -26,9 +27,12 @@ app.use(flash());
 
 app.use(express.static(__dirname+'/app/public'));
 
-app.use('*',function(req, res){
+app.use('/api',qstapi);
+
+app.use('/',function(req, res){
   res.render('index',{name: 'test'});
 });
+
 
 
 app.use(function(req,res,next){
