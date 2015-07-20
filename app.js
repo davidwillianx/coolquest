@@ -9,7 +9,8 @@ var flash = require('flash');
 var qstapi = require('./app/routes/qstapi');
 var app = express();
 
-app.set('view engine', 'ejs');
+
+app.set('view engine', 'ejs'); 
 app.set('views',path.join(__dirname+'/app/views'));
 
 app.set('port',process.env.PORT || 3000);
