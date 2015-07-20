@@ -1,0 +1,3 @@
+
+// Questionários serão dinâmicos
+// Questionários no banco terão um campo título e terão relacionamento com uma tabela de questões/perguntas
