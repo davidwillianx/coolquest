@@ -4,20 +4,22 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var logger = require('morgan');
 var flash = require('flash');
+var mongoose = require('mongoose');
 
+mongoose.connect('mongodb://localhost/coolquest');
 
 var qstapi = require('./app/routes/qstapi');
 var app = express();
 
 
-app.set('view engine', 'ejs'); 
+app.set('view engine', 'ejs');
 app.set('views',path.join(__dirname+'/app/views'));
 
 app.set('port',process.env.PORT || 3000);
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
   secret: 'thatisanamazingsoftwarethatyoushoulduse',
   resave : false,
@@ -25,7 +27,6 @@ app.use(session({
   //cookie: {secure: true} only on https servers
 }));
 app.use(flash());
-
 app.use(express.static(__dirname+'/app/public'));
 
 app.use('/api',qstapi);
@@ -33,8 +34,6 @@ app.use('/api',qstapi);
 app.use('/',function(req, res){
   res.render('index',{name: 'test'});
 });
-
-
 
 app.use(function(req,res,next){
   var error = new Error('Not found');

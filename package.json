@@ -4,7 +4,7 @@
   "description": "questions about user's feedback",
   "main": "app.js",
   "scripts": {
-    "test": "mocha test/"
+    "test": "mocha test/ -R nyan"
   },
   "repository": {
     "type": "git",
@@ -17,11 +17,13 @@
   },
   "homepage": "https://github.com/davidwillianx/coolquest",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.13.2",
     "ejs": "^2.3.2",
     "express": "^4.13.1",
     "express-session": "^1.11.3",
     "flash": "^1.1.0",
+    "jsonwebtoken": "^5.0.4",
     "material-design-lite": "^1.0.0-3",
     "mongoose": "^4.0.6",
     "morgan": "^1.6.1",

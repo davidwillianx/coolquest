@@ -4,26 +4,63 @@ var expect = require('chai').expect;
 var request = require('supertest')('http://localhost:3000');
 var mongoose = require('mongoose');
 
-process.env.MONGO_CONNECT = 'mongodb://localhost/coolquest';
-
-describe('mongoose connection', function() {
-  it('should not have connection error', function(done) {
-      mongoose.connect(process.env.MONGO_CONNECT,function(error){
+describe('/api', function() {
+  it('/ - should answer as form authenticate', function(done) {
+    request.get('/api/')
+    .expect(200)
+    .expect('Content-Type','text/html; charset=utf-8')
+    .end(function(error, res){
       should.not.exist(error);
       done();
     });
   });
-});
-
-describe('/api/answers', function() {
-    it('should return answers as JSON', function(done) {
-      request.get('/api/answers')
-        .expect(200)
-        .expect('Content-Type',/json/)
-        .end(function(error, res){
-          should.not.exist(error);
-          res.body.brothers.should.not.be.empty;
-          done();
-        });
-    })
+  it('/ - shoudl send 401 res ', function(done) {
+    request.post('/api/')
+    .expect(401)
+    .expect('Content-Type', /json/)
+    .end(done);
   });
+  it('/ - should send sucess for user persistence', function(done) {
+    request.post('/api/')
+    .send({username: 'bozo', password: 'alocriancada'})
+    .expect(201)
+    .expect('Content-Type',/json/)
+    .end(function (error, res) {
+      expect(error).to.be.null;
+      expect(res.body.success).to.be.true;
+      expect(res.body.message).to.be.equal('have fun with our great api');
+      done();
+    });
+  });
+  it('/authenticate - should send json token', function(done) {
+    var user = {
+      'username': 'bozo-palhaco',
+      'password': 'alocriancada'
+    };
+    request.post('/api/authenticate/')
+     .send(user)
+     .expect(201)
+     .expect('Content-Type',/json/)
+     .end(function (error, userAccess) {
+       expect(userAccess.body.token).to.be.undefined;
+       done();
+     });
+  });
+  it('/authenticate - should send json token', function(done) {
+    var user = {
+      'username': 'bozo',
+      'password': 'alocriancada'
+    };
+    request.post('/api/authenticate/')
+     .send(user)
+     .expect(201)
+     .expect('Content-Type',/json/)
+     .end(function (error, userAccess) {
+       expect(userAccess.body.token).to.not.be.undefined;
+       done();
+     });
+  });
+  it('/survey', function(done) {
+    request.get('/api/survey')
+  });
+});
