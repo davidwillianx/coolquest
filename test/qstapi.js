@@ -20,7 +20,7 @@ describe('/api', function() {
     .expect('Content-Type', /json/)
     .end(done);
   });
-  it('/ - should send sucess for user persistence', function(done) {
+  it('/ - should send success for user persistence', function(done) {
     request.post('/api/')
     .send({username: 'bozo', password: 'alocriancada'})
     .expect(201)
@@ -60,7 +60,34 @@ describe('/api', function() {
        done();
      });
   });
-  it('/survey', function(done) {
-    request.get('/api/survey')
+  describe('autheticate request', function() {
+    var token;
+    var user = {username: 'userAuth', password: 'authorization'};
+    before(
+      function (done) {
+        request.post('/api/')
+        .send(user)
+        .expect(201)
+        .expect('Content-Type', /json/)
+        .end(function (error, res) {
+          request.post('/api/authenticate/')
+          .send(user)
+          .expect(201)
+          .expect('Content-Type', /json/)
+          .end(function (error, res) {
+            token = res.body.token;
+            done();
+          });
+        });
+    });
+    it('/api/survey - my surveys', function(done) {
+      request.post('/api/survey')
+      .send({token: token})
+      .expect(201)
+      .expect('Content-Type',/json/)
+      .end(function (error, res) {
+        done();
+      });
+    });
   });
 });

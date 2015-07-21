@@ -10,6 +10,7 @@ var question = new Schema({
 var surveySchema = new Schema({
 	title: String,
 	createdAt: {type: Date ,default :  Date.now},
+	available : {type: Boolean, default : true},
 	question: [question]
 });
 

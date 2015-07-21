@@ -47,7 +47,7 @@ describe('Survey', function() {
         done();
       });
     });
-    it('shoul have 2 questions', function(done) {
+    it('should have 2 questions', function(done) {
       Survey.findOne({title:'Test question persistence :D'},function (error,survey) {
         expect(survey.question.length).to.equal(2);
         done();

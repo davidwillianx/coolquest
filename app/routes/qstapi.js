@@ -9,11 +9,16 @@ var jsonAnswers = {
 };
 
 apiRouter.get('/',function(req,res){
-  res.send('something');
+  res.render('api-docs');
 });
 
-apiRouter.post('/',function (req, res) {
+apiRouter.get('/docs',function (req, res) {
+  res.render('api-docs');
+});
 
+
+apiRouter.post('/',function (req, res) {
+  console.log('the red cap are comming!!');
   if(!(req.body.username || req.body.password)){
     res.status(401)
       .json({success: false, message: 'no user requirements to autheticate'});
@@ -56,7 +61,6 @@ apiRouter.post('/authenticate/',function (req, res) {
 });
 
 apiRouter.use(function (req, res, next) {
-  console.log('Validating');
   var token  = req.body.token || req.query.token || req.headers['x-access-token'];
   if(token){
     jwt.verify(token,API_TOKEN,function (error, decoded) {
@@ -65,19 +69,21 @@ apiRouter.use(function (req, res, next) {
         res.decoded = decoded;
         next();
       }
-    })
+    });
   }else{
-    return res.status(403)
-              .json({
-                success: false,
-                message: 'No toke provided'
-              });
+    return res.status(403).json({
+              success: false,
+              message: 'No token provided'
+            });
   }
 });
 
-apiRouter.route('/api/survey')
+apiRouter.route('/survey')
   .get(function (req, res) {
-    res.send('teste');
+    res.json({success: true, message: 'we are on line'});
+  })
+  .post(function (req, res) {
+    res.json({success: true, message: 'we are on line'});
   });
 
 module.exports = apiRouter;
