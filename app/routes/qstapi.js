@@ -1,5 +1,6 @@
 var express = require('express');
 var User = require('../models/user');
+var Survey = require('../models/survey');
 var jwt = require('jsonwebtoken');
 var apiRouter = express.Router();
 var API_TOKEN = 'MyFutureFuckingAwesomeKey';
@@ -18,7 +19,6 @@ apiRouter.get('/docs',function (req, res) {
 
 
 apiRouter.post('/',function (req, res) {
-  console.log('the red cap are comming!!');
   if(!(req.body.username || req.body.password)){
     res.status(401)
       .json({success: false, message: 'no user requirements to autheticate'});
@@ -49,6 +49,7 @@ apiRouter.post('/authenticate/',function (req, res) {
       if(!isMath)
         res.status(401).json({success: false, message: 'invalid username or password'});
       else {
+
         var token = jwt.sign(user, API_TOKEN);
         res.json({
           success: true,
@@ -61,7 +62,8 @@ apiRouter.post('/authenticate/',function (req, res) {
 });
 
 apiRouter.use(function (req, res, next) {
-  var token  = req.body.token || req.query.token || req.headers['x-access-token'];
+  var token  = req.body.token || req.query.token || req.headers['x-access-auth-token'];
+  console.log(req.headers['x-access-auth-token']);
   if(token){
     jwt.verify(token,API_TOKEN,function (error, decoded) {
       if(error) return res.status(401).json({success: false, message: 'Authetication failure, check your access data'});
@@ -71,6 +73,7 @@ apiRouter.use(function (req, res, next) {
       }
     });
   }else{
+    console.log('Authetication refused');
     return res.status(403).json({
               success: false,
               message: 'No token provided'
@@ -78,12 +81,34 @@ apiRouter.use(function (req, res, next) {
   }
 });
 
-apiRouter.route('/survey')
-  .get(function (req, res) {
-    res.json({success: true, message: 'we are on line'});
-  })
+apiRouter.route('/survey/:surveyId?')
   .post(function (req, res) {
-    res.json({success: true, message: 'we are on line'});
+    if(req.body.survey){
+      if(req.body.survey.title && req.body.survey.available && req.body.survey.question){
+        var newSurvey = new Survey({
+          title: req.body.survey.title,
+          available: req.body.survey.available,
+          question: req.body.survey.question
+        });
+
+        newSurvey.save(function (error) {
+          if(error)
+            res.json({success: false, message:'persistence is not working man', error: error});
+          res.json({success: true, message: 'Created successfull, have fun', id: newSurvey._id})
+        });
+      }else res.json({success: false, message:'Something wrong dude , check it out'});
+    }else res.json({success: false , message: ' dude you didnt send a suvey for us, check you variables'});
+  })
+  .get(function (req, res) {
+    if(req.params.surveyId){
+      Survey.findOne({'_id':req.params.surveyId},function (error, survey) {
+        if(error) res.json({success: false , message: 'I got error when i was loking 4 your search request'});
+        if(!survey)
+         res.json({success: false , message: 'I couldnt find anyone post by this Id'});
+        else
+         res.json({success: true,message: 'Here it is your survey', survey: survey});
+      });
+    }else res.json({success: false, message: 'ID dude send me the fking id'});
   });
 
 module.exports = apiRouter;

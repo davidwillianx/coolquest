@@ -6,6 +6,7 @@ var User = require('../app/models/user');
 
 describe('User schema', function() {
   before(function (done) {
+    mongoose.connection.close();
     mongoose.connect('mongodb://localhost/coolquest');
     User.remove().exec();
     done();

@@ -6,6 +6,7 @@ var Survey = require('../app/models/survey');
 
 describe('Survey', function() {
   before(function (done) {
+    mongoose.connection.close();
     mongoose.connect('mongodb://localhost/coolquest');
     Survey.remove().exec();
     done();

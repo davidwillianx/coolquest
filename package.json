@@ -4,7 +4,8 @@
   "description": "questions about user's feedback",
   "main": "app.js",
   "scripts": {
-    "test": "mocha test/ -R nyan"
+    "test": "mocha test/ -R nyan",
+    "start": "nodemon"
   },
   "repository": {
     "type": "git",
@@ -33,5 +34,6 @@
     "chai": "^3.0.0",
     "mocha": "^2.2.5",
     "supertest": "^1.0.1"
-  }
+  },
+  "engine":"node >=0.12.2"
 }
