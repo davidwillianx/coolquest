@@ -50,6 +50,7 @@ describe('Survey', function() {
     });
     it('should have 2 questions', function(done) {
       Survey.findOne({title:'Test question persistence :D'},function (error,survey) {
+        expect(error).to.be.null;
         expect(survey.question.length).to.equal(2);
         done();
       });

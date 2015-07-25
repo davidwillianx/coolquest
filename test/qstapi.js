@@ -126,16 +126,13 @@ describe('/api', function() {
         });
       });
       it('should get by survey id', function(done) {
-
         var survey = new Survey({
           title: 'Dragons',
           question: [
-            {
-              question: 'how to trainning your dragron?',
+            {question: 'how to trainning your dragron?',
               answer: 'may you can ask for some girl at game of thrones'
             },
-            {
-              question: 'Turn Down for?',
+            {question: 'Turn Down for?',
               answer: 'what'
             }
           ]
@@ -151,9 +148,21 @@ describe('/api', function() {
             expect(res.body.survey._id).to.be.equal(survey.id);
             done();
           })
-
         });
       });
     });
+    // describe('/api/surveys', function() {
+    //     before(function (done) {
+    //       var survey = new Survey({
+    //         title:'Blog question',
+    //         question:[
+    //           {question: 'Have you got famous?', answer: 'SureNot'},
+    //           {question: 'How many views', answer: 'SureNot'}
+    //         ]
+    //       });
+    //     });
+    // });
   });
+
+
 });

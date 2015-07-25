@@ -49,8 +49,9 @@ apiRouter.post('/authenticate/',function (req, res) {
       if(!isMath)
         res.status(401).json({success: false, message: 'invalid username or password'});
       else {
-
-        var token = jwt.sign(user, API_TOKEN);
+        var token = jwt.sign(user, API_TOKEN,{
+          expiresInMinuts: 1440
+        });
         res.json({
           success: true,
           message: 'Everything ok, ejoy your token dude',
@@ -110,5 +111,7 @@ apiRouter.route('/survey/:surveyId?')
       });
     }else res.json({success: false, message: 'ID dude send me the fking id'});
   });
+
+
 
 module.exports = apiRouter;
