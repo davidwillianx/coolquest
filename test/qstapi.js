@@ -1,13 +1,16 @@
-// var describe =  require('mocha');
 var should = require('chai').should();
 var expect = require('chai').expect;
-var request = require('supertest')('http://localhost:3000');
+var app = require('../app');
+var request = require('supertest');
 var mongoose = require('mongoose');
 var Survey = require('../app/models/survey');
+require('dotenv').load();
+
 
 describe('/api', function() {
   it('/ - should answer as form authenticate', function(done) {
-    request.get('/api/')
+    request(app)
+    .get('/api/')
     .expect(200)
     .expect('Content-Type','text/html; charset=utf-8')
     .end(function(error, res){
@@ -16,13 +19,15 @@ describe('/api', function() {
     });
   });
   it('/ - shoudl send 401 res ', function(done) {
-    request.post('/api/')
+    request(app)
+    .post('/api/')
     .expect(401)
     .expect('Content-Type', /json/)
     .end(done);
   });
   it('/ - should send success for user persistence', function(done) {
-    request.post('/api/')
+    request(app)
+    .post('/api/')
     .send({username: 'bozo', password: 'alocriancada'})
     .expect(201)
     .expect('Content-Type',/json/)
@@ -38,13 +43,14 @@ describe('/api', function() {
       'username': 'bozo-palhaco',
       'password': 'alocriancada'
     };
-    request.post('/api/authenticate/')
-     .send(user)
-     .expect(201)
-     .expect('Content-Type',/json/)
-     .end(function (error, userAccess) {
-       expect(userAccess.body.token).to.be.undefined;
-       done();
+    request(app)
+    .post('/api/authenticate/')
+    .send(user)
+    .expect(201)
+    .expect('Content-Type',/json/)
+    .end(function (error, userAccess) {
+      expect(userAccess.body.token).to.be.undefined;
+      done();
      });
   });
   it('/authenticate - should send json token', function(done) {
@@ -52,7 +58,8 @@ describe('/api', function() {
       'username': 'bozo',
       'password': 'alocriancada'
     };
-    request.post('/api/authenticate/')
+    request(app)
+    .post('/api/authenticate/')
      .send(user)
      .expect(201)
      .expect('Content-Type',/json/)
@@ -67,12 +74,14 @@ describe('/api', function() {
 
     before(
       function (done) {
-        request.post('/api/')
+        request(app)
+        .post('/api/')
         .send(user)
         .expect(201)
         .expect('Content-Type', /json/)
         .end(function (error, res) {
-          request.post('/api/authenticate/')
+          request(app)
+          .post('/api/authenticate/')
           .send(user)
           .expect(201)
           .expect('Content-Type', /json/)
@@ -83,7 +92,8 @@ describe('/api', function() {
       });
     });
     it('/api/survey - my surveys', function(done) {
-      request.post('/api/survey')
+      request(app)
+      .post('/api/survey')
       .send({token: token})
       .expect(200)
       .expect('Content-Type',/json/)
@@ -92,18 +102,20 @@ describe('/api', function() {
     describe('/api/survey - business', function() {
       before(function (done) {
         mongoose.connection.close();
-        mongoose.connect('mongodb://localhost/coolquest');
+        mongoose.connect(process.env.MONGO_CONNECT);
         done();
       });
       it('survey post', function(done) {
-        request.post('/api/survey')
+        request(app)
+        .post('/api/survey')
         .send({token: token})
         .expect(200)
         .expect('Content-Type',/json/)
         .end(done);
       });
       it('should post and persist a surveyJson', function(done) {
-        request.post('/api/survey')
+        request(app)
+        .post('/api/survey')
         .send({
           token: token,
           survey: {
@@ -138,7 +150,8 @@ describe('/api', function() {
           ]
         });
         survey.save(function (error) {
-          request.get('/api/survey/'+survey.id)
+          request(app)
+          .get('/api/survey/'+survey.id)
           .set('x-access-auth-token', token)
           .expect(200)
           .expect('Content-Type',/json/)

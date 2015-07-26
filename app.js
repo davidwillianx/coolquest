@@ -1,3 +1,4 @@
+
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
@@ -5,8 +6,9 @@ var session = require('express-session');
 var logger = require('morgan');
 var flash = require('flash');
 var mongoose = require('mongoose');
+require('dotenv').load();
 
-mongoose.connect('mongodb://localhost/coolquest');
+mongoose.connect(process.env.MONGO_CONNECT);
 
 var qstapi = require('./app/routes/qstapi');
 var app = express();
@@ -21,7 +23,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
-  secret: 'thatisanamazingsoftwarethatyoushoulduse',
+  secret: process.env.API_SECRET,
   resave : false,
   saveUninitialized: true,
   //cookie: {secure: true} only on https servers
@@ -62,3 +64,5 @@ app.use(function(req,res,next){
 app.listen(app.get('port'),function(){
   console.log('listening');
 });
+
+module.exports = app;

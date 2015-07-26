@@ -2,8 +2,8 @@ var express = require('express');
 var User = require('../models/user');
 var Survey = require('../models/survey');
 var jwt = require('jsonwebtoken');
+require('dotenv').load();
 var apiRouter = express.Router();
-var API_TOKEN = 'MyFutureFuckingAwesomeKey';
 
 var jsonAnswers = {
   brothers : ['Rosivaldo', 'luiz', 'laerte' ]
@@ -49,7 +49,7 @@ apiRouter.post('/authenticate/',function (req, res) {
       if(!isMath)
         res.status(401).json({success: false, message: 'invalid username or password'});
       else {
-        var token = jwt.sign(user, API_TOKEN,{
+        var token = jwt.sign(user, process.env.API_TOKEN,{
           expiresInMinuts: 1440
         });
         res.json({
@@ -66,7 +66,7 @@ apiRouter.use(function (req, res, next) {
   var token  = req.body.token || req.query.token || req.headers['x-access-auth-token'];
   console.log(req.headers['x-access-auth-token']);
   if(token){
-    jwt.verify(token,API_TOKEN,function (error, decoded) {
+    jwt.verify(token,process.env.API_TOKEN,function (error, decoded) {
       if(error) return res.status(401).json({success: false, message: 'Authetication failure, check your access data'});
       else {
         res.decoded = decoded;

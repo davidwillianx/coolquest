@@ -20,6 +20,7 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.13.2",
+    "dotenv": "^1.2.0",
     "ejs": "^2.3.2",
     "express": "^4.13.1",
     "express-session": "^1.11.3",
@@ -35,5 +36,5 @@
     "mocha": "^2.2.5",
     "supertest": "^1.0.1"
   },
-  "engine":"node >=0.12.2"
+  "engine": "node >=0.12.2"
 }

@@ -1,13 +1,13 @@
 var should = require('chai').should();
 var expect = require('chai').expect;
-var request = require('supertest')('http://localhost:3000');
 var mongoose = require('mongoose');
 var Survey = require('../app/models/survey');
+require('dotenv').load();
 
 describe('Survey', function() {
   before(function (done) {
     mongoose.connection.close();
-    mongoose.connect('mongodb://localhost/coolquest');
+    mongoose.connect(process.env.MONGO_CONNECT);
     Survey.remove().exec();
     done();
   });
