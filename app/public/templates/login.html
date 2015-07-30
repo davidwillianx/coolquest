@@ -1,0 +1,27 @@
+<div class="geral">
+    <div class="auth" ng-hide="logged">
+        <div class="row">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-8">
+                <h2 style="text-align: center;">Logon</h2>
+                <br>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="email" ng-model="email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-control" id="senha" ng-model="senha" placeholder="Senha" required>
+                </div>
+                <button class="pull-right btn btn-default" type="submit" ng-click="submit()">Entrar</button>
+            </div>
+            <div class="col-xs-2"></div>
+        </div>
+
+    </div>
+    <div class="logged" ng-show="logged" style="text-align:center">
+        <h1>Bem-vindo</h1>
+        <br><br>
+        <a class="btn btn-default" ng-href="#/users">VER USUÁRIOS</a>
+        <a class="btn btn-default" ng-href="#/users/create">CADASTRAR</a>
+    </div>
+</div>
+
