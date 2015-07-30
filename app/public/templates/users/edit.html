@@ -1,0 +1,17 @@
+<fieldset>
+    <legend>Edição de comédias</legend>
+    <form>
+        <div class="form-group">
+            <label for="name">Nome: </label>
+            <input type="text" name="name" id="name" ng-model="user.name">
+        </div>
+        <div class="form-group">
+            <label for="email">Email: </label>
+            <input type="text" name="email" id="email" ng-model="user.email">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-default" ng-click="update(user)">Enviar</button>
+        </div>
+    </form>
+</fieldset>
+<a ng-href="/#/users">Voltar</a>

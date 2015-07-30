@@ -1,0 +1,21 @@
+<table class="table table-bordered">
+	<thead>
+		<tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Visualizar detalhes</th>
+            <th>Editar</th>
+            <th>Excluir</th>
+        </tr>
+		<tbody>
+			<tr ng-repeat="user in users" class="item-repeated">
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td><a ng-href="/#/user/{{user.id}}">Visualizar</a></td>
+                <td><a ng-href="/#/user/edit/{{user.id}}">Editar</a></td>
+                <td><a href="javascript:void(0)" ng-click="destroy(user)">Excluir</a></td>
+            </tr>
+		</tbody>
+	</thead>
+</table>
+<a ng-href="#/">Voltar</a>
