@@ -29,12 +29,12 @@ describe('/api', function() {
     request(app)
     .post('/api/')
     .send({username: 'bozo', password: 'alocriancada'})
-    .expect(201)
+    .expect(200)
     .expect('Content-Type',/json/)
     .end(function (error, res) {
       expect(error).to.be.null;
       expect(res.body.success).to.be.true;
-      expect(res.body.message).to.be.equal('have fun with our great api');
+      expect(res.body.message).to.be.equal('have fun with you great coolquest apit token');
       done();
     });
   });

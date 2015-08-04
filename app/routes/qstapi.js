@@ -4,6 +4,8 @@ var Survey = require('../models/survey');
 var jwt = require('jsonwebtoken');
 require('dotenv').load();
 var apiRouter = express.Router();
+var UserService = require('../layer/user.js');
+var userService = new UserService();
 
 var jsonAnswers = {
   brothers : ['Rosivaldo', 'luiz', 'laerte' ]
@@ -23,15 +25,11 @@ apiRouter.post('/',function (req, res) {
     res.status(401)
       .json({success: false, message: 'no user requirements to autheticate'});
   }else {
-    var newUser = new User({
-      username: req.body.username,
-      password: req.body.password
-    });
-    newUser.save(function (error) {
-      if(error)
-        res.status(401).json({success: false, message: 'register failure'});
-      res.status(201).json({success: true, message: 'have fun with our great api'});
-    });
+    userService.register(req.body.username, req.body.password,function(error){
+ 	if(error) 
+		res.status(401).json({success: false, message: 'User persistence failure'});
+   	res.json({success: true, message: 'have fun with you great coolquest apit token'}); 
+    }); 
   }
 });
 
