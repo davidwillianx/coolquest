@@ -3,6 +3,7 @@ var expect = require('chai').expect;
 var app = require('../app');
 var request = require('supertest');
 var mongoose = require('mongoose');
+var User = require('../app/models/user');
 var Survey = require('../app/models/survey');
 require('dotenv').load();
 
@@ -38,7 +39,7 @@ describe('/api', function() {
       done();
     });
   });
-  it('/authenticate - should send json token', function(done) {
+  it('/authenticate - should not send json token', function(done) {
     var user = {
       'username': 'bozo-palhaco',
       'password': 'alocriancada'
@@ -54,19 +55,22 @@ describe('/api', function() {
      });
   });
   it('/authenticate - should send json token', function(done) {
-    var user = {
-      'username': 'bozo',
-      'password': 'alocriancada'
-    };
-    request(app)
-    .post('/api/authenticate/')
-     .send(user)
-     .expect(201)
-     .expect('Content-Type',/json/)
-     .end(function (error, userAccess) {
-       expect(userAccess.body.token).to.not.be.undefined;
-       done();
-     });
+    var user = new User({
+    	username: 'bozo',
+	password: 'alocriancada'
+    });
+    user.save(function(error){
+	should.not.exist.error;    
+ 	request(app)
+         .post('/api/authenticate/')
+         .send({username: 'bozo', password: 'alocriancada'})
+         .expect(201)
+         .expect('Content-Type',/json/)
+         .end(function (error, userAccess) {
+           expect(userAccess.body.token).to.not.be.undefined;
+           done();
+         });
+    });
   });
   describe('autheticate request', function() {
     var token;

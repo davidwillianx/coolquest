@@ -34,45 +34,37 @@ apiRouter.post('/',function (req, res) {
 });
 
 apiRouter.post('/authenticate/',function (req, res) {
-  if(!(req.body.username || req.body.password))
-     res.status(401).json({success: false, message: 'no data required to autheticate'});
-  User.findOne({'username': req.body.username},function (error, user) {
-    if(error) res.status(401).json({error: error});
-
-    if(!user)
-      res.status(401).json({success: false, message: 'user not found'});
-    else
-    user.isPasswordValid(req.body.password,function (error, isMath) {
-      if(error) res.status(401).json({error: error});
-      if(!isMath)
-        res.status(401).json({success: false, message: 'invalid username or password'});
-      else {
-        var token = jwt.sign(user, process.env.API_TOKEN,{
-          expiresInMinuts: 1440
-        });
-        res.json({
-          success: true,
-          message: 'Everything ok, ejoy your token dude',
-          token: token
-        });
-      }
-    });
-  });
+    if(req.body.username && req.body.password){
+    	userService.authenticate(req.body.username, req.body.password, function(error, user){
+	     if(error)
+	        res.status(401).json({error: error});
+	     else{
+		var token = jwt.sign(user,process.env.API_TOKEN,{
+			expiresInMinutes: 1440
+		});     
+		res.json({
+		     success: true,
+		     message: 'Everything ok, enjoy your token',
+		     token  : token
+		});
+	     }
+	});
+    }else 
+     res.json({success: false, message: 'error.message'});
 });
 
 apiRouter.use(function (req, res, next) {
   var token  = req.body.token || req.query.token || req.headers['x-access-auth-token'];
-  console.log(req.headers['x-access-auth-token']);
   if(token){
     jwt.verify(token,process.env.API_TOKEN,function (error, decoded) {
-      if(error) return res.status(401).json({success: false, message: 'Authetication failure, check your access data'});
+      if(error) 
+	 return res.status(401).json({success: false, message: 'Authetication failure, check your access data'});
       else {
         res.decoded = decoded;
         next();
       }
     });
   }else{
-    console.log('Authetication refused');
     return res.status(403).json({
               success: false,
               message: 'No token provided'
