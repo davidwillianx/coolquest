@@ -2,10 +2,10 @@ var express = require('express');
 var User = require('../models/user');
 var Survey = require('../models/survey');
 var jwt = require('jsonwebtoken');
-require('dotenv').load();
 var apiRouter = express.Router();
 var UserService = require('../layer/user.js');
 var userService = new UserService();
+require('dotenv').load();
 
 var jsonAnswers = {
   brothers : ['Rosivaldo', 'luiz', 'laerte' ]
@@ -53,6 +53,10 @@ apiRouter.post('/authenticate/',function (req, res) {
      res.json({success: false, message: 'error.message'});
 });
 
+
+
+
+
 apiRouter.use(function (req, res, next) {
   var token  = req.body.token || req.query.token || req.headers['x-access-auth-token'];
   if(token){
@@ -71,6 +75,7 @@ apiRouter.use(function (req, res, next) {
             });
   }
 });
+
 
 apiRouter.route('/survey/:surveyId?')
   .post(function (req, res) {

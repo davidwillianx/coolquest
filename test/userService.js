@@ -28,4 +28,15 @@ describe('UserService',function(){
 		done();
 	});
    });
+   it('#authenticate',function(done){
+  	var user = {
+	   name: 'turtuleZ',
+	   passwd: 'pizzaPwr'
+	};
+	userService.authenticate(user.name, user.passwd, function(error,user){
+	   should.not.exist.error;
+	   expect(user.name).to.be.equal(user.name);
+	   done();
+	});
+   });
 });

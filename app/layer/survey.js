@@ -1,0 +1,2 @@
+var surveySchema = require('mongoose');
+
