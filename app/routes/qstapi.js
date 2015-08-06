@@ -4,7 +4,9 @@ var Survey = require('../models/survey');
 var jwt = require('jsonwebtoken');
 var apiRouter = express.Router();
 var UserService = require('../layer/user.js');
+var SurveyService = require('../layer/survey');
 var userService = new UserService();
+var surveyService = new SurveyService();
 require('dotenv').load();
 
 var jsonAnswers = {
@@ -79,33 +81,24 @@ apiRouter.use(function (req, res, next) {
 
 apiRouter.route('/survey/:surveyId?')
   .post(function (req, res) {
-    if(req.body.survey){
-      if(req.body.survey.title && req.body.survey.available && req.body.survey.question){
-        var newSurvey = new Survey({
-          title: req.body.survey.title,
-          available: req.body.survey.available,
-          question: req.body.survey.question
-        });
+     if(req.body.survey){
+        surveyService.register(req.body.survey,function(error,surveyId){
+	 if(error) res.json({success: false, message: error});
+	 res.json({sucess: true, message:'Persistence ok', id: surveyId });
 
-        newSurvey.save(function (error) {
-          if(error)
-            res.json({success: false, message:'persistence is not working man', error: error});
-          res.json({success: true, message: 'Created successfull, have fun', id: newSurvey._id})
-        });
-      }else res.json({success: false, message:'Something wrong dude , check it out'});
-    }else res.json({success: false , message: ' dude you didnt send a suvey for us, check you variables'});
-  })
+	});
+     }else res.json({success: false, message: 'No survey to persist'});	  
+
+   })
   .get(function (req, res) {
-    if(req.params.surveyId){
-      Survey.findOne({'_id':req.params.surveyId},function (error, survey) {
-        if(error) res.json({success: false , message: 'I got error when i was loking 4 your search request'});
-        if(!survey)
-         res.json({success: false , message: 'I couldnt find anyone post by this Id'});
-        else
-         res.json({success: true,message: 'Here it is your survey', survey: survey});
-      });
-    }else res.json({success: false, message: 'ID dude send me the fking id'});
-  });
+     if(req.params.surveyId){
+       surveyService.findById(req.params.surveyId,function(error,surveyFound){
+           if(error) res.json({success: false, message: 'survey not found dude, check if you params are correct'});       	
+
+	   res.json({success:true, message: 'here is your survey',survey : surveyFound});
+       }); 
+     }else res.json({success: false, message: 'you path has not params'});
+    });
 
 
 
