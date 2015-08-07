@@ -13,10 +13,10 @@ mongoose.connect(process.env.MONGO_CONNECT);
 var qstapi = require('./app/routes/qstapi');
 var app = express();
 
-app.engine('html', require('ejs').__express);
-app.set('view engine', 'ejs');
+/*app.engine('html', require('ejs').__express);*/
+/*app.set('view engine', 'ejs');*/
 app.set('port',process.env.PORT || 3000);
-app.set('views',path.join(__dirname+'/app/views'));
+/*app.set('views',path.join(__dirname+'/app/views'));*/
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -33,7 +33,8 @@ app.use(express.static(__dirname+'/app/public'));
 app.use('/api',qstapi);
 
 app.use('/',function(req, res){
-  res.render('./home.html');
+  res.sendFile(__dirname+'/app/views/home.html');
+  /*res.render('./home.html');*/
 });
 
 app.use(function(req,res,next){
