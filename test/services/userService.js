@@ -1,21 +1,21 @@
 var should = require('chai').should();
 var expect = require('chai').expect;
 var mongoose = require('mongoose');
-var UserService = require('../app/layer/user');
-var User = require('../app/models/user');
+var UserService = require('../../app/services/user');
+var User = require('../../app/models/user');
 require('dotenv').load();
 describe('UserService',function(){
 
    var userService = new UserService();
    before(function(done){
-     mongoose.connection.close();	       	   
-     mongoose.connect(process.env.MONGO_CONNECT);	   
+     mongoose.connect(process.env.MONGO_CONNECT);
      expect(userService).to.be.an.instanceof(UserService); 
      done();
    });
    after(function(done){
         User.remove().exec();
-  	mongoose.connection.close();
+	/*mongoose.disconnect();*/
+	mongoose.connection.close();
 	done();
    });
    it('#register',function(done){

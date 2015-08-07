@@ -1,14 +1,23 @@
 var should = require('chai').should();
 var expect = require('chai').expect;
-var app = require('../app');
+var app = require('../../app');
 var request = require('supertest');
 var mongoose = require('mongoose');
-var User = require('../app/models/user');
-var Survey = require('../app/models/survey');
+var User = require('../../app/models/user');
+var Survey = require('../../app/models/survey');
 require('dotenv').load();
 
 
 describe('/api', function() {
+  before(function(done){
+ // mongoose.connect(process.env.MONGO_CONNECT);
+    done();
+  });	
+  after(function(done){
+//     mongoose.disconnect();
+     mongoose.connection.close();
+     done();
+  });
   it('/ - should answer as form authenticate', function(done) {
     request(app)
     .get('/api/')
@@ -105,8 +114,6 @@ describe('/api', function() {
     });
     describe('/api/survey - business', function() {
       before(function (done) {
-        mongoose.connection.close();
-        mongoose.connect(process.env.MONGO_CONNECT);
         done();
       });
       it('survey post', function(done) {
@@ -164,22 +171,36 @@ describe('/api', function() {
             expect(res.body.success).to.be.true;
             expect(res.body.survey._id).to.be.equal(survey.id);
             done();
-          })
+          });
         });
       });
+      it('should update survey',function(done){
+         var survey = new Survey({
+               title: 'Dragons',
+	       question: [
+	          {question: 'how to trainning your dragron?',
+	           answer: 'may you can ask for some girl at game of thrones'
+	          },
+	          {question: 'Turn Down for?',
+	           answer: 'what'
+	          }
+		  ]
+		});
+	 survey.save(function (error) {
+	    request(app)
+	    .put('/api/survey/'+survey.id)
+	    .set('x-access-auth-token', token)
+	    .expect(200)
+	    .expect('Content-Type',/json/)
+	    .end(function(error, res) {
+	        expect(error).to.be.null;
+	        expect(res.body.success).to.be.true;
+		expect(res.body.message).to.be.equal('survey update done');
+		expect(res.body.id).to.be.undefined;
+	        done();
+	     });
+	 });
+      });
     });
-    // describe('/api/surveys', function() {
-    //     before(function (done) {
-    //       var survey = new Survey({
-    //         title:'Blog question',
-    //         question:[
-    //           {question: 'Have you got famous?', answer: 'SureNot'},
-    //           {question: 'How many views', answer: 'SureNot'}
-    //         ]
-    //       });
-    //     });
-    // });
   });
-
-
 });

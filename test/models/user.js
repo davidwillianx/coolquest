@@ -1,19 +1,19 @@
 var mongoose = require('mongoose');
 var should = require('chai').should();
 var expect = require('chai').expect;
-var User = require('../app/models/user');
+var User = require('../../app/models/user');
 require('dotenv').load();
 
 
 describe('User schema', function() {
   before(function (done) {
-    mongoose.connection.close();
     mongoose.connect(process.env.MONGO_CONNECT);
     User.remove().exec();
     done();
   });
   after(function (done) {
     User.remove().exec();
+    /*mongoose.disconnect();*/
     mongoose.connection.close();
     done();
   });

@@ -1,22 +1,22 @@
 var should = require('chai').should();
 var expect = require('chai').expect;
 var mongoose = require('mongoose');
-var Survey = require('../app/models/survey');
+var Survey = require('../../app/models/survey');
 require('dotenv').load();
 
 describe('Survey', function() {
   before(function (done) {
-    mongoose.connection.close();
     mongoose.connect(process.env.MONGO_CONNECT);
     Survey.remove().exec();
     done();
   });
   after(function (done) {
     Survey.remove().exec();
-    mongoose.connection.close();
+    //mongoose.disconnect();
+     mongoose.connection.close();
     done();
   });
-  describe('#save()', function() {
+  describe('#save', function() {
     it('Should have survey schema', function(done) {
       var survey = new Survey();
       expect(survey).to.be.an.instanceof(Survey);

@@ -1,8 +1,8 @@
 var should = require('chai').should();
 var expect = require('chai').expect;
-var Survey  = require('../app/models/survey');
+var Survey  = require('../../app/models/survey');
 var mongoose = require('mongoose');
-var SurveyService = require('../app/layer/survey');
+var SurveyService = require('../../app/services/survey');
 require('dotenv').load();
 
 
@@ -11,14 +11,14 @@ describe('SurveyService',function(){
     var surveyService = new SurveyService();
 
     before(function(done){
-	mongoose.connection.close();
 	mongoose.connect(process.env.MONGO_CONNECT);
 	expect(surveyService).to.be.an.instanceof(SurveyService);
 	done();
     });
     after(function(done){
         Survey.remove().exec(); 
-	mongoose.connection.close();    
+//	mongoose.disconnect();
+	mongoose.connection.close();
 	done();
     });
 
