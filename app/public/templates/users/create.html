@@ -1,13 +1,13 @@
 <fieldset>
-	<legend>Cadastro de Novos comédias</legend>
-	<form>
+    <legend>Cadastro de Novos comédias</legend>
+    <form>
         <div class="form-group">
-            <label for="name">Nome: </label>
-            <input type="text" name="name" id="name" ng-model="user.name">
+            <label for="username">Nome: </label>
+            <input type="text" name="username" id="username" ng-model="user.username">
         </div>
         <div class="form-group">
-            <label for="email">Email: </label>
-            <input type="text" name="email" id="email" ng-model="user.email">
+            <label for="password">Senha: </label>
+            <input type="password" name="password" id="password" ng-model="user.password">
         </div>
         <div class="form-group">
             <button class="btn btn-default" ng-click="save(user)">Enviar</button>

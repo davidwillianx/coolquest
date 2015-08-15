@@ -1,16 +1,12 @@
 <fieldset>
-    <legend>Edição de comédias</legend>
+    <legend>Edição de Usuários</legend>
     <form>
         <div class="form-group">
-            <label for="name">Nome: </label>
-            <input type="text" name="name" id="name" ng-model="user.name">
+            <label for="title">Titulo: </label>
+            <input type="text" name="title" id="title" ng-model="categoria.title">
         </div>
         <div class="form-group">
-            <label for="email">Email: </label>
-            <input type="text" name="email" id="email" ng-model="user.email">
-        </div>
-        <div class="form-group">
-            <button class="btn btn-default" ng-click="update(user)">Enviar</button>
+            <button class="btn btn-default" ng-click="update(categoria)">Enviar</button>
         </div>
     </form>
 </fieldset>
